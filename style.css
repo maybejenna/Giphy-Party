@@ -1,4 +1,4 @@
-body{
+body{ 
     background-color: black;
     display: grid; /* Use Grid */
     place-items: center;
@@ -6,6 +6,8 @@ body{
 
 canvas{
     margin: 0;
+    z-index: -1;
+    pointer-events: none;
 }
 
 h1 {
@@ -29,12 +31,14 @@ input{
     margin-top: 15px;
     height: 30px; 
     width: 200px; 
+    z-index: 3;
 }
 
 button {
     height: 35px; 
     width: 80px; 
     margin-bottom: 25px;
+    z-index: 3;
 }
 
 .removeButton {
@@ -52,12 +56,14 @@ button {
     padding: 5px;
     border-radius: 0 0 0 5px; 
     opacity: 0.8;
+    z-index: 3;
 }
 
 .removeButton:hover {
     opacity: 1; 
     background-color: red;
     cursor: pointer;
+    z-index: 3;
 }
 
 #remove-gifs {
@@ -65,12 +71,14 @@ button {
     width: 120px; 
     border-radius: 5px;
     border-style: none;
+    z-index: 3;
 }
 
 #remove-gifs:hover {
     background-color: crimson;
     color: aliceblue;
     cursor: pointer;
+    z-index: 3;
 }
 
 

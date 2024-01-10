@@ -1,9 +1,14 @@
 let canvas = document.getElementById("canvas");
 let context = canvas.getContext("2d");
-// let width = window.innerWidth;
-// let height = window.innerHeight;
-// canvas.width = width; // Set canvas size
-// canvas.height = height;
+canvas.style.position = 'fixed';
+canvas.style.top = '0';
+canvas.style.left = '0';
+canvas.style.width = '100%';
+canvas.style.height = '100%';
+canvas.style.zIndex = '1';
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
 let particles = [];
 let particleSettings = {
     count: 500,
@@ -11,71 +16,71 @@ let particleSettings = {
     wave: 0
 };
 
-window.requestAnimationFrame = 
-    window.requestAnimationFrame || 
-    function (call) {
-        window.setTimeout(call, 1000/60); 
-    };
+let isAnimating = false; // Initial state of animation
 
 function randomNumber(min, max) {
     return Math.random() * (max - min) + min;
-};
+}
 
 function createConfetti() {
     while (particles.length < particleSettings.count) {
-        let particle = new Particle();
-        particle.color = `rgb(${randomNumber(0, 255)}, ${randomNumber(0, 255)}, ${randomNumber(0, 255)})`;
-        particles.push(particle);
+        particles.push(new Particle());
     }
 }
 
+function Particle() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height - canvas.height;
+    this.area = randomNumber(10, 15);
+    this.tilt = randomNumber(-4, 4);
+    this.tiltAngle = 0;
+    this.color = `rgb(${randomNumber(0, 255)}, ${randomNumber(0, 255)}, ${randomNumber(0, 255)})`;
+}
+
+Particle.prototype.draw = function () {
+    context.beginPath();
+    context.lineWidth = this.area;
+    context.strokeStyle = this.color; 
+    this.x += this.tilt;
+    context.moveTo(this.x + this.area / 2, this.y);
+    context.lineTo(this.x, this.y + this.tilt + this.area / 2);
+    context.stroke();
+}
+
 const startConfetti = () => {
-    console.log("Started Confetti")
-    context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    if (!isAnimating) {
+        return; // Prevent multiple animation starts
+    }
+
+    context.clearRect(0, 0, canvas.width, canvas.height);
     createConfetti();
+
     let allOnGround = true;
     for (let i in particles) {
         particleSettings.wave += 0.4;
         particles[i].tiltAngle += randomNumber(0.01, 0.2);
         particles[i].y += (Math.sin(particleSettings.wave) + particles[i].area + particleSettings.gravity) * 0.2;
         particles[i].tilt = Math.cos(particles[i].tiltAngle) * 0.3;
-       
         particles[i].draw();
-        if (particles[i].y > window.innerHeight) {
-            particles[i] = new Particle();
-            particles[i].color = `rgb(${randomNumber(0, 255)}, ${randomNumber(0, 255)}, ${randomNumber(0, 255)})`;
+
+        if (particles[i].y <= canvas.height) {
+            allOnGround = false;
         }
     }
-    animationTimer = requestAnimationFrame(startConfetti); 
-}; 
 
-function Particle() {
-    this.x = Math.random() * window.innerWidth;
-    this.y = Math.random() * window.innerHeight - window.innerHeight;
-    this.area = randomNumber(10, 15);
-    this.tilt = randomNumber(-4, 4);
-    this.tiltAngle = 0;
-    this.opacity = 1;
-}
-
-Particle.prototype = {
-    draw: function () {
-        context.beginPath();
-        context.lineWidth = this.area;
-        context.strokeStyle = this.color; 
-        this.x = this.x + this.tilt;
-        context.moveTo(this.x + this.area / 2, this.y);
-        context.lineTo(this.x, this.y + this.tilt + this.area / 2);
-        context.stroke();
+    if (!allOnGround) {
+        requestAnimationFrame(startConfetti);
     }
 }
 
-setTimeout(function() {
-    startFading = true;
-}, 3000); 
-
-
-document.getElementById('gif-search-form').addEventListener('submit', async function(event) {
-    event.preventDefault(); // Reset before starting new animation
-    startConfetti(); // Start the confetti animation
-}); 
+document.getElementById('gif-search-form').addEventListener('submit', () => {
+    if (!isAnimating) {
+        isAnimating = true; // Set the flag to start animation
+        particles = []; // Reset particles array for new animation
+        startConfetti();
+        setTimeout(() => {
+            isAnimating = false; // Set the flag to stop animation
+            context.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+        }, 3000); // Stop after 3 seconds
+    }
+});
