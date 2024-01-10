@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Giphy Party!</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Form for searching GIFs -->
+<canvas id="canvas"></canvas>
+
+<h1 class="title">GIPHY PARTY</h1>
+<h2 class="About">Search a term, get a random GIPHY gif, party with it!</h2>
+
+
+  <form id="gif-search-form">
+    <input type="text" id="search-input" placeholder="Search for a GIF">
+    <button type="submit">Search</button>
+  </form>
+
+  <!-- Container for displaying GIFs -->
+  <div id="gifs-container"></div>
+
+  <button id="remove-gifs">Remove All GIFs</button>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.js"></script>
+  <script src="app.js"></script>
+  
+</body>
+
+</html>
