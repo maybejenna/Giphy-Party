@@ -20,11 +20,10 @@ document.getElementById('gif-search-form').addEventListener('submit', async func
         let imgElement = document.createElement('img');
         imgElement.src = gifUrl;
         gifContainer.appendChild(imgElement);
-        animationFrameId = window.requestAnimationFrame(startConfetti);
-
+  
         let removeButton = document.createElement('button');
         removeButton.className = 'removeButton'; // Setting the CSS class
-        removeButton.innerText = 'X';
+        removeButton.innerText = 'X ';
         removeButton.addEventListener('click', function() {
             gifContainer.remove();
         });
