@@ -2,7 +2,7 @@ console.log("Let's get this party started!");
 document.getElementById('gif-search-form').addEventListener('submit', async function(event) {
     event.preventDefault();
     let searchTerm = document.getElementById('search-input').value;
-    let response = await axios.get(`http://api.giphy.com/v1/gifs/search?q=${searchTerm}&api_key=2QxMGtSbGPQNIFPdJPwDtrBgGmiBEYOH`);
+    let response = await axios.get(`https://api.giphy.com/v1/gifs/search?q=${searchTerm}&api_key=2QxMGtSbGPQNIFPdJPwDtrBgGmiBEYOH`);
     console.log(response.data);
 
     try {
