@@ -2,7 +2,10 @@ body{
     background-color: black;
     display: grid; /* Use Grid */
     place-items: center;
-    overflow: hidden;
+}
+
+canvas{
+    margin: 0;
 }
 
 h1 {
@@ -56,6 +59,20 @@ button {
     background-color: red;
     cursor: pointer;
 }
+
+#remove-gifs {
+    height: 35px; 
+    width: 120px; 
+    border-radius: 5px;
+    border-style: none;
+}
+
+#remove-gifs:hover {
+    background-color: crimson;
+    color: aliceblue;
+    cursor: pointer;
+}
+
 
 img {
     height: 250px; 
