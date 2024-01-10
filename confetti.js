@@ -34,13 +34,16 @@ function Particle() {
     this.area = randomNumber(10, 15);
     this.tilt = randomNumber(-4, 4);
     this.tiltAngle = 0;
-    this.color = `rgb(${randomNumber(0, 255)}, ${randomNumber(0, 255)}, ${randomNumber(0, 255)})`;
+    this.opacity = 1;
+    this.red = Math.floor(randomNumber(0, 255)); 
+    this.green = Math.floor(randomNumber(0, 255)); 
+    this.blue = Math.floor(randomNumber(0, 255)); 
 }
 
 Particle.prototype.draw = function () {
     context.beginPath();
     context.lineWidth = this.area;
-    context.strokeStyle = this.color; 
+    context.strokeStyle = `rgba(${this.red}, ${this.green}, ${this.blue}, ${this.opacity})`; 
     this.x += this.tilt;
     context.moveTo(this.x + this.area / 2, this.y);
     context.lineTo(this.x, this.y + this.tilt + this.area / 2);
@@ -73,14 +76,30 @@ const startConfetti = () => {
     }
 }
 
+const fadeOutConfetti = () => {
+    let fading = false;
+    for (let i in particles) {
+        if (particles[i].opacity > 0) {
+            particles[i].opacity -= 0.01; // Decrease opacity
+            fading = true;
+        }
+    }
+    return fading;
+};
+
 document.getElementById('gif-search-form').addEventListener('submit', () => {
     if (!isAnimating) {
-        isAnimating = true; // Set the flag to start animation
-        particles = []; // Reset particles array for new animation
+        isAnimating = true; 
+        particles = []; 
         startConfetti();
         setTimeout(() => {
-            isAnimating = false; // Set the flag to stop animation
-            context.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
-        }, 3000); // Stop after 3 seconds
+            let fadeEffect = setInterval(() => {
+                if (!fadeOutConfetti()) {
+                    clearInterval(fadeEffect);
+                    isAnimating = false;
+                    context.clearRect(0, 0, canvas.width, canvas.height);
+                }
+            }, 30); // Adjust the interval to control fade speed
+        }, 2500);
     }
 });
